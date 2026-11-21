@@ -193,6 +193,14 @@ function hideBeacon() {
   missionState.beaconRing.visible = false;
 }
 
+// Staging helper for the game's own screenshot modes: point the gold
+// objective beacon at a chosen spot on the road ahead of the player car,
+// so a staged chase shot can show the mission objective in frame without
+// changing any mission state.
+export function placeShotBeacon(x, z) {
+  setBeacon(x, z);
+}
+
 export function currentMarker() {
   if (!missionState.beacon.visible) return null;
   return { x: missionState.beacon.position.x, z: missionState.beacon.position.z };

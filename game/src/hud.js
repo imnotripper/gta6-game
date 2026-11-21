@@ -91,7 +91,7 @@ export function showControlsHint(seconds = 9) {
 export function showBanner(title) {
   els.banner.textContent = title;
   els.banner.style.opacity = '1';
-  bannerTimer = 2.6;
+  bannerTimer = 4.2;
 }
 
 export function showToast(text, seconds = 3) {
@@ -188,7 +188,7 @@ export function drawMinimap(playerPos, playerHeading, marker, policeUnits, time)
     const p = toMap(unit.x, unit.z);
     ctx.fillStyle = Math.sin(time * 10) > 0 ? '#ff4455' : '#4488ff';
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 4.4, 0, Math.PI * 2);
     ctx.fill();
   }
   // Mission marker.
@@ -197,7 +197,7 @@ export function drawMinimap(playerPos, playerHeading, marker, policeUnits, time)
     ctx.fillStyle = '#ffc233';
     ctx.strokeStyle = '#00000088';
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 4.6, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
   }
@@ -208,10 +208,10 @@ export function drawMinimap(playerPos, playerHeading, marker, policeUnits, time)
   ctx.rotate(Math.atan2(Math.sin(playerHeading), -Math.cos(playerHeading)));
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.moveTo(0, -6);
-  ctx.lineTo(4, 5);
-  ctx.lineTo(0, 2.4);
-  ctx.lineTo(-4, 5);
+  ctx.moveTo(0, -7.5);
+  ctx.lineTo(5, 6);
+  ctx.lineTo(0, 3);
+  ctx.lineTo(-5, 6);
   ctx.closePath();
   ctx.fill();
   ctx.restore();

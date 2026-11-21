@@ -14,9 +14,9 @@ import {
   buildPlayer, player, playerPosition, isDriving, nearestCar, enterCar, exitCar,
   updatePlayerOnFoot, updatePlayerDriving, respawnPlayer,
 } from './player.js';
-import { initPolice, updatePolice, addCrime, clearWanted, police, policeBlips } from './police.js';
+import { initPolice, updatePolice, addCrime, addHeat, clearWanted, police, policeBlips } from './police.js';
 import {
-  initMissions, offerMission, updateMissions, currentMarker, failMission,
+  initMissions, offerMission, updateMissions, currentMarker, placeShotBeacon, failMission,
   initPickups, updatePickups, PLACES, STORY,
 } from './missions.js';
 import * as hud from './hud.js';
@@ -330,17 +330,19 @@ function updateCamera(dt) {
   if (isDriving()) {
     const car = player.car;
     const pos = car.mesh.position;
-    const back = 10.5 + Math.abs(car.speed) * 0.06;
+    // Closer and lower than a survey camera: the car fills more of the
+    // frame, so a chase reads at a glance even in a small screenshot.
+    const back = 9.0 + Math.abs(car.speed) * 0.05;
     const desired = new THREE.Vector3(
       pos.x - Math.sin(car.heading) * back * Math.cos(cameraPitch * 0.4),
-      3.4 + Math.sin(cameraPitch) * 4,
+      2.85 + Math.sin(cameraPitch) * 3.2,
       pos.z - Math.cos(car.heading) * back * Math.cos(cameraPitch * 0.4),
     );
     // The chase camera eases toward the car's own heading.
     cameraYaw = cameraYaw + shortestAngle(car.heading - cameraYaw) * clamp(dt * 2.2, 0, 1);
     camPos.lerp(desired, clamp(dt * 5.5, 0, 1));
     camera.position.copy(camPos);
-    camTarget.set(pos.x + Math.sin(car.heading) * 9, 1.6, pos.z + Math.cos(car.heading) * 9);
+    camTarget.set(pos.x + Math.sin(car.heading) * 8, 1.5, pos.z + Math.cos(car.heading) * 8);
     camera.lookAt(camTarget);
     const speedRatio = Math.abs(car.speed) / car.model.topSpeed;
     camera.fov = lerp(camera.fov, 62 + speedRatio * 13, clamp(dt * 4, 0, 1));
@@ -527,8 +529,11 @@ function stageShot(mode) {
     hud.showControlsHint(30);
     offerMission(0);
   } else if (mode === 'drive' || mode === 'chase') {
+    // Eastbound lane (road centre + 3.4, the lane traffic itself uses for
+    // this heading): staging in the westbound lane put the car head-on
+    // into oncoming traffic, which bulldozed it out of the shot.
     const car = spawnCar(scene, {
-      x: roadCenter(3), z: roadCenter(5) - 3.4, heading: Math.PI / 2,
+      x: roadCenter(3), z: roadCenter(5) + 3.4, heading: Math.PI / 2,
       model: CAR_MODELS[1], mode: 'parked',
     });
     // A gold Kestrel reads clearly in screenshots.
@@ -538,23 +543,37 @@ function stageShot(mode) {
       }
     });
     enterCar(car);
-    car.speed = 17;
+    car.speed = mode === 'chase' ? 18 : 17;
     cameraYaw = car.heading;
+    cameraPitch = 0.22;
     player.hasPistol = true;
     if (mode === 'chase') {
       save.missionIndex = 3;
       offerMission(3);
-      addCrime('missionSpike');
-      addCrime('missionSpike');
-      addCrime('missionSpike');
-      // One cruiser staged on the tail, in the same lane, so the chase reads
-      // in the frame and on the minimap without an early pile-up.
+      hud.showBanner('BORROWED WINGS');
+      // Exactly four wanted stars, staged deterministically: clear any
+      // crime the car entry may have been witnessed for, then set the
+      // heat by hand so the star count never drifts between captures.
+      clearWanted();
+      addHeat(3.6);
+      // The gold mission beacon stands on the road ahead of the car, so
+      // the objective is in the same frame as the chase.
+      placeShotBeacon(car.mesh.position.x + 96, car.mesh.position.z);
+      // Two cruisers staged on the tail, offset to either side of the
+      // player's lane so both light bars read in frame and on the
+      // minimap without an early pile-up.
       const behind = spawnCar(scene, {
-        x: car.mesh.position.x - 21, z: car.mesh.position.z - 3.4,
+        x: car.mesh.position.x - 26, z: car.mesh.position.z - 3.6,
         heading: Math.PI / 2, police: true, mode: 'police',
       });
-      behind.speed = 14;
+      behind.speed = 13.5;
       police.units.push(behind);
+      const second = spawnCar(scene, {
+        x: car.mesh.position.x - 35, z: car.mesh.position.z + 3.0,
+        heading: Math.PI / 2, police: true, mode: 'police',
+      });
+      second.speed = 13;
+      police.units.push(second);
     } else {
       offerMission(1);
     }
