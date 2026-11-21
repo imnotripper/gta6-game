@@ -11,12 +11,13 @@ let dialogueDone = null;
 let dialogueTimer = 0;
 let bannerTimer = 0;
 let toastTimer = 0;
+let hintTimer = 0;
 
 export function initHud() {
   for (const id of [
     'hud', 'cash', 'healthFill', 'armorFill', 'armorRow', 'stars', 'objectiveTitle',
     'objectiveSub', 'prompt', 'timer', 'dialogue', 'dialogueWho', 'dialogueText',
-    'banner', 'toast', 'bustWrap', 'bustFill', 'speedo', 'minimap', 'vehicleName',
+    'banner', 'toast', 'bustWrap', 'bustFill', 'speedo', 'minimap', 'vehicleName', 'controlsHint',
   ]) {
     els[id] = document.getElementById(id);
   }
@@ -80,6 +81,13 @@ export function setBust(meter) {
   els.bustFill.style.width = `${clamp(meter * 100, 0, 100)}%`;
 }
 
+export function showControlsHint(seconds = 9) {
+  if (!els.controlsHint) return;
+  els.controlsHint.style.display = 'block';
+  els.controlsHint.style.opacity = '1';
+  hintTimer = seconds;
+}
+
 export function showBanner(title) {
   els.banner.textContent = title;
   els.banner.style.opacity = '1';
@@ -131,6 +139,11 @@ export function updateHud(dt) {
   if (bannerTimer > 0) {
     bannerTimer -= dt;
     if (bannerTimer <= 0) els.banner.style.opacity = '0';
+  }
+  if (hintTimer > 0 && els.controlsHint) {
+    hintTimer -= dt;
+    if (hintTimer < 1.4) els.controlsHint.style.opacity = '0';
+    if (hintTimer <= 0) els.controlsHint.style.display = 'none';
   }
   if (toastTimer > 0) {
     toastTimer -= dt;

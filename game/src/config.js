@@ -62,9 +62,9 @@ export const WANTED = {
 };
 
 export const WORLD = {
-  trafficCars: 26,
-  parkedCars: 30,
-  pedestrians: 42,
+  trafficCars: 32,
+  parkedCars: 34,
+  pedestrians: 56,
   dayLengthSeconds: 420,     // one full day/night cycle
   startTimeOfDay: 0.79,      // golden hour, sliding into neon dusk
 };

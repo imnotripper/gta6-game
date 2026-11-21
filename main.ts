@@ -36,3 +36,4 @@ const dossier = buildDossier(outDir, {
   game_path_max_bytes: 1000,
 });
 writeFileSync(join(outDir, 'dossier.json'), dossier);
+console.log(`Neon Harbor: Solace City — dossier written to ${outDir} (game/ + screenshots/ copied, ${dossier.length} bytes).`);

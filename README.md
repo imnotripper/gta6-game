@@ -55,6 +55,16 @@ After the story, gold markers keep offering paid odd jobs across the city.
 | Enter | Advance dialogue |
 | P | Pause menu (save from here) |
 
+## What's new in this polish pass
+
+Livelier streets (more pedestrians and traffic, with extra traffic seeded
+near Rico's spawn corner), a fading first-minutes controls hint in the HUD
+(`WASD move · Mouse look · E enter car — follow the gold marker`), a taller,
+brighter, harder-pulsing gold mission beacon, `F` as an alternative
+interact key, a sprint step-bob, snappier police light bars, per-pedestrian
+walking speeds, and refreshed screenshots — the foot shot is now staged on
+a busy sidewalk with passing traffic.
+
 ## Run it
 
 Serve `game/` with any static file server and open `index.html` in desktop

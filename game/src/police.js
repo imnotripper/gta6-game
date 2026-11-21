@@ -137,7 +137,7 @@ export function updatePolice(dt) {
     const bar = unit.mesh.userData.lightBar;
     if (bar) {
       police.flashTimer += dt;
-      const phase = Math.sin(police.flashTimer * 14 + unit.mesh.position.x) > 0;
+      const phase = Math.sin(police.flashTimer * 19 + unit.mesh.position.x) > 0;
       bar.red.material.color.setHex(phase ? 0xff2244 : 0x55101c);
       bar.blue.material.color.setHex(phase ? 0x11255c : 0x2266ff);
     }

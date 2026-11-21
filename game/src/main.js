@@ -9,7 +9,7 @@ import { initInput, keys, mouse, consumeMouseDelta, onPress, requestLock, releas
 import { initAudio, sfx, setEngine, setMusic } from './audio.js';
 import { buildWorld } from './world.js';
 import { seedTraffic, seedParkedCars, updateTrafficCar, separateCars, allCars, spawnCar, CAR_MODELS } from './vehicles.js';
-import { seedPedestrians, updatePedestrians, pedestrians, scarePedestrians, hurtPedestrian } from './pedestrians.js';
+import { seedPedestrians, spawnPedestrian, updatePedestrians, pedestrians, scarePedestrians, hurtPedestrian } from './pedestrians.js';
 import {
   buildPlayer, player, playerPosition, isDriving, nearestCar, enterCar, exitCar,
   updatePlayerOnFoot, updatePlayerDriving, respawnPlayer,
@@ -198,6 +198,7 @@ function startGame(fresh) {
   state = 'playing';
   setMusic(false);
   offerMission(save.missionIndex);
+  hud.showControlsHint(9);
   hud.showToast(save.missionIndex > 0 || save.storyDone ? 'Welcome back to Solace City' : 'Follow the gold marker to meet Sol Reyes', 4.5);
 }
 
@@ -279,7 +280,7 @@ onPress('KeyP', () => {
   else if (state === 'paused') resumeGame();
 });
 onPress('Enter', () => hud.advanceDialogue());
-onPress('KeyE', () => {
+function toggleCar() {
   if (state !== 'playing' || hud.dialogueActive()) return;
   if (isDriving()) {
     exitCar();
@@ -292,7 +293,9 @@ onPress('KeyE', () => {
       hud.showToast(car.model.name, 1.6);
     }
   }
-});
+}
+onPress('KeyE', toggleCar);
+onPress('KeyF', toggleCar);
 onPress('KeyH', () => { if (isDriving()) sfx.horn(); });
 
 canvas.addEventListener('click', () => {
@@ -498,9 +501,30 @@ function stageShot(mode) {
   document.getElementById('hud').style.display = 'block';
   state = 'playing';
   if (mode === 'foot') {
-    player.mesh.position.set(roadCenter(4) + 3, 0, roadCenter(4) + 10);
+    // Stage on the south sidewalk of the central east-west road: Rico in
+    // frame, neighbours strolling past, traffic rolling behind him.
+    const roadZ = roadCenter(4);
+    const px = roadCenter(4) + 8;
+    const pz = roadZ + CITY.roadWidth / 2 + 2.4;
+    player.mesh.position.set(px, 0, pz);
     player.heading = -0.7;
     cameraYaw = -0.7;
+    const strollers = [
+      { dx: 5.5, dz: 0.6, heading: Math.PI / 2 }, { dx: -6.5, dz: -0.8, heading: -Math.PI / 2 },
+      { dx: 11, dz: 0.2, heading: Math.PI / 2 }, { dx: -13, dz: 0.9, heading: Math.PI / 2 },
+      { dx: 3.2, dz: -13.5, heading: 0 }, { dx: -2.5, dz: 14, heading: Math.PI },
+    ];
+    for (const s of strollers) spawnPedestrian(scene, { x: px + s.dx, z: pz + s.dz, heading: s.heading });
+    const east = spawnCar(scene, { x: px - 42, z: roadZ + 3.4, heading: Math.PI / 2, mode: 'traffic' });
+    east.speed = 9;
+    const west = spawnCar(scene, { x: px + 12, z: roadZ - 3.4, heading: -Math.PI / 2, mode: 'traffic' });
+    west.speed = 10.5;
+    // Parked cars on the curbs around the corner, so the street reads lived-in.
+    spawnCar(scene, { x: px - 14, z: roadZ + 6.6, heading: Math.PI / 2, mode: 'parked' });
+    spawnCar(scene, { x: px + 15, z: roadZ - 6.6, heading: -Math.PI / 2, mode: 'parked' });
+    spawnCar(scene, { x: roadCenter(4) + 6.6, z: pz + 17, heading: 0, mode: 'parked' });
+    spawnCar(scene, { x: roadCenter(4) - 6.6, z: pz - 19, heading: Math.PI, mode: 'parked' });
+    hud.showControlsHint(30);
     offerMission(0);
   } else if (mode === 'drive' || mode === 'chase') {
     const car = spawnCar(scene, {

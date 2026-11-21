@@ -1,12 +1,13 @@
 // save.js — the whole persistence layer: one localStorage record holding
 // story progress, cash, the pistol, lifetime stats and where Rico was last
 // standing. Saving happens from the pause menu and at every mission end.
+// Save format v2 (polish pass): same shape as v1; v1 records still load.
 
 import { SAVE_KEY, PLAYER } from './config.js';
 
 export function defaultSave() {
   return {
-    version: 1,
+    version: 2,
     missionIndex: 0,       // next story mission to play
     storyDone: false,
     cash: PLAYER.startCash,
@@ -28,7 +29,7 @@ export function loadSave() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!parsed || parsed.version !== 1) return null;
+    if (!parsed || (parsed.version !== 1 && parsed.version !== 2)) return null;
     return { ...defaultSave(), ...parsed, stats: { ...defaultSave().stats, ...(parsed.stats || {}) } };
   } catch {
     return null;

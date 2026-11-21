@@ -289,8 +289,8 @@ function buildHarbor() {
   const accentMats = [0xff2e88, 0x22d3ee, 0xffb02e, 0x4ade80].map(
     (c) => new THREE.MeshLambertMaterial({ color: c }),
   );
-  for (let b = 0; b < 9; b++) {
-    const x = -260 + b * 62 + rng.range(-8, 8);
+  for (let b = 0; b < 12; b++) {
+    const x = -286 + b * 52 + rng.range(-8, 8);
     const z = CITY.halfExtent + 34 + rng.range(-4, 6);
     const boat = new THREE.Group();
     const hull = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.4, 11), hullMat);

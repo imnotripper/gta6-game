@@ -152,7 +152,8 @@ function animateBody(dt) {
   parts.legs[1].rotation.x = -swing;
   parts.arms[0].rotation.x = -swing * 0.8;
   parts.arms[1].rotation.x = swing * 0.8;
-  player.mesh.position.y = Math.abs(Math.sin(player.walkPhase)) * 0.04;
+  const bobHeight = Math.abs(player.speed) > PLAYER.walkSpeed + 0.4 ? 0.075 : 0.04;
+  player.mesh.position.y = Math.abs(Math.sin(player.walkPhase)) * bobHeight;
 }
 
 function swingArm() {

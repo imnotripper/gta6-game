@@ -36,7 +36,7 @@ export function initInput(canvas) {
     }
   });
   addEventListener('keyup', (event) => keys.delete(event.code));
-  addEventListener('blur', () => keys.clear());
+  addEventListener('blur', () => { keys.clear(); mouse.down = false; mouse.rightDown = false; });
 
   canvas.addEventListener('mousedown', (event) => {
     if (event.button === 0) mouse.down = true;

@@ -142,10 +142,10 @@ export function initMissions(scene, hooks) {
   missionState.scene = scene;
   missionState.hooks = hooks;
   const beaconMat = new THREE.MeshBasicMaterial({
-    color: 0xffc233, transparent: true, opacity: 0.34, depthWrite: false, side: THREE.DoubleSide,
+    color: 0xffc233, transparent: true, opacity: 0.44, depthWrite: false, side: THREE.DoubleSide,
   });
-  missionState.beacon = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.7, 34, 18, 1, true), beaconMat);
-  missionState.beacon.position.y = 17;
+  missionState.beacon = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 48, 18, 1, true), beaconMat);
+  missionState.beacon.position.y = 24;
   missionState.beacon.visible = false;
   scene.add(missionState.beacon);
   const ringMat = new THREE.MeshBasicMaterial({ color: 0xffc233, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
@@ -329,7 +329,7 @@ export function updateMissions(dt) {
   const pos = playerPosition();
   // Pulse the beacon ring.
   if (missionState.beaconRing.visible) {
-    const s = 1 + Math.sin(performance.now() * 0.005) * 0.12;
+    const s = 1 + Math.sin(performance.now() * 0.006) * 0.24;
     missionState.beaconRing.scale.set(s, s, s);
   }
 

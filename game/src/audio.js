@@ -129,7 +129,7 @@ export function setEngine(on, speedRatio = 0, throttle = 0) {
     return;
   }
   if (engineNodes) {
-    const base = 55 + speedRatio * 130 + throttle * 22;
+    const base = 52 + speedRatio * 148 + throttle * 26 + speedRatio * speedRatio * 18;
     engineNodes.oscA.frequency.value = base;
     engineNodes.oscB.frequency.value = base * 0.5 + 2;
     engineNodes.gain.gain.value = 0.05 + speedRatio * 0.05 + throttle * 0.03;

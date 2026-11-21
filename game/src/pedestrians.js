@@ -63,6 +63,7 @@ export function spawnPedestrian(scene, { x, z, heading = 0, outfit = {}, station
     health: 60,
     name,
     walkPhase: rng.range(0, Math.PI * 2),
+    walkSpeed: rng.spread(1.5, 0.4),
     downTimer: 0,
     fleeFrom: null,
     fleeTimer: 0,
@@ -148,7 +149,7 @@ export function updatePedestrian(ped, dt) {
     return;
   }
 
-  let wantSpeed = 1.5;
+  let wantSpeed = ped.walkSpeed || 1.5;
   if (ped.state === 'flee') {
     wantSpeed = 5.6;
     ped.fleeTimer -= dt;

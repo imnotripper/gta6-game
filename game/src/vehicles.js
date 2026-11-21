@@ -288,8 +288,11 @@ export function seedTraffic(scene, count) {
   const cars = [];
   for (let n = 0; n < count; n++) {
     const alongX = rng.chance(0.5);
-    const roadIndex = rng.int(0, CITY.blocksPerSide);
-    const t = rng.range(-CITY.halfExtent + 30, CITY.halfExtent - 30);
+    // The first few cars roll near the player's south-east spawn corner so
+    // the opening street already has traffic on it.
+    const nearSpawn = n < 6;
+    const roadIndex = nearSpawn ? rng.int(7, CITY.blocksPerSide) : rng.int(0, CITY.blocksPerSide);
+    const t = nearSpawn ? rng.range(150, CITY.halfExtent - 30) : rng.range(-CITY.halfExtent + 30, CITY.halfExtent - 30);
     const dir = rng.sign();
     let x;
     let z;
@@ -305,7 +308,7 @@ export function seedTraffic(scene, count) {
       z = t;
     }
     const car = spawnCar(scene, { x, z, heading, mode: 'traffic' });
-    car.speed = rng.range(6, 11);
+    car.speed = rng.spread(8.5, 2.5);
     cars.push(car);
   }
   return cars;
