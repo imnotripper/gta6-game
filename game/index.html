@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon Harbor: Solace City</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- In-game HUD -->
+<div id="hud" style="display:none">
+  <div id="objectiveCard">
+    <div id="objectiveTitle"></div>
+    <div id="objectiveSub"></div>
+  </div>
+  <div id="topRight">
+    <div id="stars">☆☆☆☆☆</div>
+    <div id="cash">$0</div>
+    <div class="barRow"><span class="barLabel">HP</span><div class="bar"><div id="healthFill"></div></div></div>
+    <div class="barRow" id="armorRow" style="display:none"><span class="barLabel">AR</span><div class="bar"><div id="armorFill"></div></div></div>
+    <div id="timer" style="display:none"></div>
+  </div>
+  <div id="minimapWrap">
+    <canvas id="minimap" width="196" height="196"></canvas>
+    <div id="mapLabel">SOLACE CITY</div>
+  </div>
+  <div id="speedo" style="display:none"></div>
+  <div id="vehicleName" style="display:none"></div>
+  <div id="prompt" style="display:none"></div>
+  <div id="bustWrap" style="display:none"><div id="bustLabel">BUSTED?</div><div class="bar"><div id="bustFill"></div></div></div>
+  <div id="banner"></div>
+  <div id="toast"></div>
+  <div id="dialogue" style="display:none">
+    <div id="dialogueWho"></div>
+    <div id="dialogueText"></div>
+    <div id="dialogueHint">Enter ▸</div>
+  </div>
+  <div id="vignette"></div>
+</div>
+
+<!-- Start screen -->
+<div id="startScreen">
+  <div class="titleBlock">
+    <div class="titleSmall">WELCOME TO</div>
+    <h1 class="titleMain">NEON&nbsp;HARBOR</h1>
+    <div class="titleSub">S O L A C E &nbsp; C I T Y</div>
+    <p class="titleBlurb">An open-world crime story. Rico Vane is back in town,<br>
+    the diner is in trouble, and every neon mile of the city is yours to take.</p>
+    <div class="menuButtons">
+      <button id="btnNew" class="menuBtn">NEW GAME</button>
+      <button id="btnContinue" class="menuBtn">CONTINUE</button>
+    </div>
+    <div class="controlsCard">
+      <div><b>W A S D</b> move / drive</div>
+      <div><b>Mouse</b> look &nbsp;·&nbsp; <b>Click</b> punch / shoot</div>
+      <div><b>E</b> enter / exit car</div>
+      <div><b>Shift</b> sprint &nbsp;·&nbsp; <b>Space</b> handbrake</div>
+      <div><b>P / Esc</b> pause &nbsp;·&nbsp; <b>Enter</b> advance dialogue</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pause menu -->
+<div id="pauseMenu" style="display:none">
+  <div class="panel">
+    <h2>PAUSED</h2>
+    <div id="pauseStats"></div>
+    <button id="btnResume" class="menuBtn">RESUME</button>
+    <button id="btnSave" class="menuBtn">SAVE GAME</button>
+    <button id="btnRestartMission" class="menuBtn">ABANDON MISSION</button>
+    <button id="btnQuitToTitle" class="menuBtn">QUIT TO TITLE</button>
+    <div class="controlsCard small">
+      <div><b>W A S D</b> move / drive · <b>E</b> car · <b>Shift</b> sprint</div>
+      <div><b>Space</b> handbrake · <b>Click</b> punch / shoot · <b>H</b> horn</div>
+    </div>
+  </div>
+</div>
+
+<!-- Wasted / Busted / Ending screen -->
+<div id="endScreen" style="display:none">
+  <div class="panel">
+    <h2 id="endTitle">WASTED</h2>
+    <p id="endText"></p>
+    <button id="btnRespawn" class="menuBtn">CONTINUE</button>
+  </div>
+</div>
+
+<div id="loadError" style="display:none"></div>
+
+<script src="vendor/three.min.js"></script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
